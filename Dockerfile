@@ -23,7 +23,8 @@ ONBUILD ADD . /usr/src/app
 ENV MENDELEY_PUPPET_PATH ""
 
 # Workaround - add our special settings.xml to the container BEFORE running mvn commands
-ONBUILD RUN mvn -s .ci/settings.xml install
+# Workaround - DO NOT run the integration tests as they will fail at image build stage
+ONBUILD RUN mvn -s .ci/settings.xml install -DskipITs
 
 # FIXME we use this wrapper script to pretend that ConfiguredCommandCommand can accept
 # its variables from an env var (when currently it can only read from a file).
