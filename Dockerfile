@@ -11,8 +11,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Put the Maven configs into this base image
-RUN mkdir -p .ci
-ADD settings.xml /usr/src/app/.ci
+RUN mkdir -p /usr/src/app/.ci
+ADD settings.xml /usr/src/app/.ci/
 
 # Put all the contents of the git repo into the container
 ONBUILD ADD . /usr/src/app
