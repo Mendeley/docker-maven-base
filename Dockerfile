@@ -13,7 +13,6 @@ WORKDIR /usr/src/app
 
 # Put the Maven configs into this base image
 ADD settings.xml /usr/src/app/.ci/
-ADD run-server.sh /usr/src/app/
 
 # Put all the contents of the git repo into the container
 ONBUILD ADD . /usr/src/app
@@ -23,17 +22,8 @@ ONBUILD ADD . /usr/src/app
 # Be sure to set this *before* running mvn install
 ENV MENDELEY_PUPPET_PATH ""
 
-# Current way in which the jar is invoked means we have to know about the Dropwizard
-# environment in the run script.
-ENV DW_ENV development
-
 # Workaround - use our special settings.xml in the container when running mvn commands
 # Workaround - DO NOT run the integration tests as they will fail at image build stage
 ONBUILD RUN mvn -s .ci/settings.xml package
 
-# FIXME we use this wrapper script to pretend that ConfiguredCommandCommand can accept
-# its variables from an env var (when currently it can only read from a file).
-# When ConfiguredCommandCommand is improved, we can just use something like
-# CMD ["mvn -s .ci/settings.xml exec:exec [with some env vars in the system]
-# and ditch the wrapper script.
-CMD ["./run-server.sh"]
+# The child app will define a CMD; we cannot predict this ahead of time.
