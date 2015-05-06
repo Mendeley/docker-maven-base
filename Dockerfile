@@ -10,6 +10,9 @@ RUN mkdir -p /usr/src/app
 # Everything we do from now on is in the context of this folder
 WORKDIR /usr/src/app
 
+# Put the Maven configs into this base image
+ADD .ci /usr/src/app
+
 # Put all the contents of the git repo into the container
 ONBUILD ADD . /usr/src/app
 
