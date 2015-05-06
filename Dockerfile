@@ -11,11 +11,10 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Put the Maven configs into this base image
-# copying a folder that should be a subfolder of app/ so use a trailing slash
-ADD .ci /usr/src/app/
+RUN mkdir -p .ci
+ADD settings.xml /usr/src/app/.ci
 
 # Put all the contents of the git repo into the container
-# copying the contents of the folder into app/ so do not use a trailing slash
 ONBUILD ADD . /usr/src/app
 
 # Workaround - Vagrant system is deprecated so this value is still required, but unused
