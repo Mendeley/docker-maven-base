@@ -4,15 +4,16 @@ FROM maven:3.3-jdk-7
 
 MAINTAINER Chris Kilding <chris.kilding@mendeley.com>
 
-# Create a place in the container to put this folder of app code
+# Create a place in the container to put the folder of app code, and Maven configs
 RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/.ci
 
 # Everything we do from now on is in the context of this folder
 WORKDIR /usr/src/app
 
 # Put the Maven configs into this base image
-RUN mkdir -p /usr/src/app/.ci
 ADD settings.xml /usr/src/app/.ci/
+ADD run-server.sh /usr/src/app/
 
 # Put all the contents of the git repo into the container
 ONBUILD ADD . /usr/src/app
@@ -22,7 +23,7 @@ ONBUILD ADD . /usr/src/app
 # Be sure to set this *before* running mvn install
 ENV MENDELEY_PUPPET_PATH ""
 
-# Workaround - add our special settings.xml to the container BEFORE running mvn commands
+# Workaround - use our special settings.xml in the container when running mvn commands
 # Workaround - DO NOT run the integration tests as they will fail at image build stage
 ONBUILD RUN mvn -s .ci/settings.xml package
 
