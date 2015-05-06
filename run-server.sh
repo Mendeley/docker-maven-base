@@ -28,4 +28,4 @@ cat /tmp/runtime-env-vars.yml
 echo "End of temp config file"
 
 # Then run the server
-mvn -s .ci/settings.xml exec:exec
+java -jar target/*-service-*-jar-with-dependencies.jar mendeley-server -e $DW_ENV -L -f /tmp/runtime-env-vars.yml
